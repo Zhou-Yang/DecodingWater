@@ -1,27 +1,28 @@
 import numpy
 import sys
-sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
+sys.path.append('/home/zy/anaconda2/lib/python2.7/site-packages/')
 from MDAnalysis import Universe, Writer
 from MDAnalysis.analysis.distances import distance_array
 import MDAnalysis
 
-DCD='water_analysis.dcd'
-PSF='ionized.psf'
+DCD='md_noPBC.xtc'
+PSF='npt.gro'
 
 distanceMat=open('distance.txt','w')
 rho=Universe(PSF,DCD)
 ##print rho
 ##print list(rho.residues)
-p=rho.selectAtoms('protein and not backbone and not(name H*)')
-w=rho.selectAtoms('resname TIP3 and not(name H*)')
+p=rho.select_atoms('protein and not backbone and not(name H*)')
+w=rho.select_atoms('resname SOL and not(name H*)')
 ##print list(p)
-pc=p.coordinates()
+#pc=p.coordinates()
+pc=p.positions
 print len(pc)
-proteResid=p.resids()
-waterResid=w.resids()
-proteResnu=p.resnames()
-waterResna=w.resnames()
-waterResnu=w.resnums()
+proteResid=p.resids
+waterResid=w.resids
+proteResnu=p.resnames
+waterResna=w.resnames
+waterResnu=w.resnums
 atomInf=[]
 for i in w.atoms:
     atomid= str(i).split()[2]
@@ -45,7 +46,7 @@ for ts in rho.trajectory:
     distanceMat.write('frame'+' '+str(frameNo)+'\n')
     title='resname'+'    '+'atomid'+'    '+'resnumber'+'    X    Y     Z   '+'   '+'segname'+'\n'
     distanceMat.write(title)
-    wc=w.coordinates()
+    wc=w.positions
 ##    print str(wc[0])[1:-1]
 ##    print list(wc)[0]
 ##    print pc
@@ -118,7 +119,7 @@ distanceMat.close()
 
 
 
-##bb=u.selectAtoms('protein and backbone')
+##bb=u.select_atoms('protein and backbone')
 ##print list(bb)
 ##print bb.coordinates()
 
