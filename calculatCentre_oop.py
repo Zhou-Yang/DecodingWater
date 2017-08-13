@@ -12,8 +12,9 @@
 
 import numpy
 import sys
-sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
-from Numeric import *
+sys.path.append('/home/zy/anaconda2/lib/python2.7/site-packages/')
+#sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
+#from Numeric import *
 from datetime import datetime
 
 waters=open('distance.txt','r')
@@ -25,12 +26,12 @@ def formatWaterInfor(self):
     waterInfor=[]
     for line in self:
         line=line.split()
-        if line[0]=='TIP3':
+        if line[0]=='SOL':
             line[1]=line[1][:-1]
             line[-1]=line[-1][1:-2]
         elif line[0]=='frame':
             frameNo=line[1]
-        if line[0]=='TIP3':
+        if line[0]=='SOL':
             line.append(str(frameNo))
             waterInfor.append(line)
     return waterInfor
@@ -158,14 +159,19 @@ def getWaterDistGrid(self,totalGrid):
     waterDistGrid=[]
     for No in range(len(totalGrid)):
         waterDistGrid.append([])
-    for coord in self:
+    while(self):
+        coord = self.pop()
+        print len(self)
         gridNo=0
         for grid in totalGrid:
             if grid[3]>coord[0]>=grid[0] and grid[4]>coord[1]>=grid[1] and grid[5]>coord[2]>=grid[2]:
                 waterDistGrid[gridNo].append(coord)
-##                print coord,'is in ',grid
-##                print waterDistGrid[gridNo]
+                
+                #print coord,'is in ',grid
+                #print waterDistGrid[gridNo]
+                #print "gridNo:%s" %gridNo
             gridNo=gridNo+1
+        #print coord
     return waterDistGrid
 
 ##getWaterDistGrid needs two inputs: 1,self: the coordidats saved as [[x,y,z]....]
@@ -303,83 +309,48 @@ def writeCentre(self,outPutFileName):
     
            
 waterInfor=formatWaterInfor(waters)
-print len(waterInfor)
+print "the length of waterInfo: %s" %(len(waterInfor))
 waterCoords=getWaterCoord(waterInfor,0,1)
-print len(waterCoords)
+print "the length of waterCoords: %s" %(len(waterCoords))
 minAndMax=getMinAndMax(waterCoords)
-print minAndMax
+print "the min and max is %s" %(minAndMax)
 gridSize=divideGrid(minAndMax)
-print gridSize
+print "the grid size: %s" %(gridSize)
 totalGrid=generateGrid(gridSize,minAndMax)
-print len(totalGrid)
-waterGridDist=getWaterDistGrid(waterCoords,totalGrid)
-print len(waterGridDist)
-
-
-##number=0
-##for i in waterGridDist:
-##    if len(i)>15:
-##        print len(i)
-##    number=number+len(i)
-##print 'there were', number,'were clustered'
-    
-##print waterGridDist
+print "the total grid: %s" %(len(totalGrid))
+#waterGridDist=getWaterDistGrid(waterCoords,totalGrid)
+#print "the waterGridDist:%s" %(len(waterGridDist))
+#
+#
+###number=0
+###for i in waterGridDist:
+###    if len(i)>15:
+###        print len(i)
+###    number=number+len(i)
+###print 'there were', number,'were clustered'
+#    
+###print waterGridDist
 waterCountDist=countWaterDistGrid(waterGridDist)
-highDensity=getHighDensityGrid(waterCountDist,1500)
-print len(highDensity)
+highDensity=getHighDensityGrid(waterCountDist,25)
+print "highDensity:%s" %(len(highDensity))
 highDensityGrid=extractHighDensity(highDensity,totalGrid)
-print highDensityGrid
+#print "hihgDensityGrid:%s" %(highDensityGrid)
 highDensityWaterGridDist=extractHighDensity(highDensity,waterGridDist)
-print len(highDensityWaterGridDist)
-
+#print "highDensityWaterGridDist:%s" %(len(highDensityWaterGridDist))
+#
 highDensityCentre=getCentre(highDensityWaterGridDist)
-
-print highDensityCentre
-
+#
+#print "highDensityCentre:%s" %(highDensityCentre)
+#
 shortDistance=determineMerge(highDensityCentre,2.4)
-print shortDistance
-
+#print "schortDistance:%s" %(shortDistance)
+#
 newCentre=recaulcateCentre(shortDistance,highDensityWaterGridDist,highDensityCentre)
-
-print len(newCentre)
-print newCentre
-
+#
+#print "len of newCentre:%" %(len(newCentre))
+#print "newCentre:%s" %(newCentre)
+#
 writeCentre(newCentre,waterCentre)
-
-
-
-        
-
-
-            
-        
-
-
-
-
-                
-        
-    
-    
-    
-
-
-    
-    
-
-
-    
-    
-    
-    
-
-
-    
-        
-    
-
-
-        
-    
-
-        
+#
+#
+#
