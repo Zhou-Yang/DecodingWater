@@ -12,18 +12,18 @@
 
 import numpy
 import sys
-sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
-
-from Numeric import *
+#sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
+sys.path.append('/home/zy/anaconda2/lib/python2.7/site-packages/')
+#from Numeric import *
 from datetime import datetime
 from MDAnalysis import Universe, Writer
 from MDAnalysis.analysis.distances import distance_array
 import MDAnalysis
 
 
-DCD='water_analysis.dcd'
-PSF='ionized.psf'
-frameNo=6000
+DCD='md_noPBC.xtc'
+PSF='npt.gro'
+frameNo=1000
 
 centreFile=open('optimizedCentre.txt','r')
 waterFile=open('waterInforByCentre.txt','r')
@@ -127,18 +127,18 @@ def getWaterCoorWithH(self,centre,psf,dcd,outputFile):
 ##            print no1
             frameNo=oxygenInfor[-2]
             frameNo=int(frameNo)-1
-            segName=oxygenInfor[-3]
+            segName=oxygenInfor[0]
             resNumber=oxygenInfor[2]
             frame=rho.trajectory[frameNo]
-            infor='segid '+segName+' and resid '+resNumber
-            selected=rho.selectAtoms(infor)
+            infor='resname '+segName+' and resid '+resNumber
+            selected=rho.select_atoms(infor)
             atomID=[]
             for atoms in selected.atoms:
                 ID=str(atoms).split()[2][:-1]
                 atomID.append(ID)
-            selectedResId=selected.resids()
-            selectedResNa=selected.resnames()
-            coordsOH1H2=selected.coordinates()
+            selectedResId=selected.resids
+            selectedResNa=selected.resnames
+            coordsOH1H2=selected.positions
             for i in range(3):
                 atomInfor=str(selectedResNa[0])+'    '+str(atomID[i])+'    '+str(resNumber)+'    '+str(coordsOH1H2[i])[1:-1]+'   '+segName+'    '+str(frameNo)+'    '+str(no)+'\n'
                 outputFile.write(atomInfor)

@@ -14,8 +14,9 @@
 
 import numpy
 import sys
-sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
-from Numeric import *
+sys.path.append('/home/zy/anaconda2/lib/python2.7/site-packages/')
+#sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
+#from Numeric import *
 from datetime import datetime
 
 waters=open('distance.txt','r')
@@ -29,12 +30,12 @@ def formatWaterInfor(self):
     waterInfor=[]
     for line in self:
         line=line.split()
-        if line[0]=='TIP3':
+        if line[0]=='SOL':
             line[1]=line[1][:-1]
             line[-1]=line[-1][1:-2]
         elif line[0]=='frame':
             frameNo=line[1]
-        if line[0]=='TIP3':
+        if line[0]=='SOL':
             line.append(str(frameNo))
             waterInfor.append(line)
     return waterInfor

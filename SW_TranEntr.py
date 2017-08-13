@@ -13,9 +13,9 @@
 
 import numpy
 import sys
-sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
-
-from Numeric import *
+#sys.path.append('/home/x/xiansu/pfs/program/numpy/lib/python2.6/site-packages')
+sys.path.append('/home/zy/anaconda2/lib/python2.7/site-packages/')
+#from Numeric import *
 from datetime import datetime
 
 
@@ -23,7 +23,9 @@ centreFile=open('optimizedCentre.txt','r')
 waterFile=open('waterInforByCentre.txt','r')
 H2OInforFile=open('WW_allCentre_H2O.txt','r')
 
+
 outputFile=open('SW.dat','w')
+pi = 3.14159265
 k=1.380648813*(10**(-23))   ## The unit of the boltzmann constant is J/K.
 weiH2O=18.0154
 mol=6.02214179*(10**23)
@@ -219,7 +221,7 @@ def calculateGRTheta(self,centre,frameNo):
         print 'the angle distri bution grThetaNo',centreNo,grThetaNo    
         for number in range(len(grThetaNo)):
             nextNumber=number+1
-            grThetaNo[number]=(grThetaNo[number]/(cos(number*pi/20)-cos(nextNumber*pi/20)))/(frameNo/2.0)
+            grThetaNo[number]=(grThetaNo[number]/(numpy.cos(number*pi/20)-numpy.cos(nextNumber*pi/20)))/(frameNo/2.0)
         grTheta.append(grThetaNo)
         print 'the angle distri bution grThetaNo',centreNo, grThetaNo
 ##    print grTheta
@@ -370,7 +372,7 @@ def getH2OEulerTheta(self,frameNo):
         print 'the euler Theta No is:',CentreNo, eulerThetaNo
         for number in range(len(eulerThetaNo)):
             nextNumber=number+1
-            eulerThetaNo[number]=(eulerThetaNo[number]/(cos(number*pi/20)-cos(nextNumber*pi/20)))/(frameNo/2.0)
+            eulerThetaNo[number]=(eulerThetaNo[number]/(numpy.cos(number*pi/20)-numpy.cos(nextNumber*pi/20)))/(frameNo/2.0)
         eulerTheta.append(eulerThetaNo)
         print 'the euler Theta No is:',CentreNo,eulerThetaNo
     return eulerTheta
@@ -528,7 +530,7 @@ def intgGtheta(self):
         eachGtheta=self[gthetaNo]
         angle1=gthetaNo*pi/20
         angle2=(gthetaNo+1)*pi/20
-        eachGtheta=eachGtheta*(cos(angle1)-cos(angle2))
+        eachGtheta=eachGtheta*(numpy.cos(angle1)-numpy.cos(angle2))
         sumGtheta+=eachGtheta
     return sumGtheta
 
@@ -570,7 +572,7 @@ def intgGthetaln(self):
         if eachGthetaln!=0.0:
             angle1=eachGthetalnNo*pi/20
             angle2=(eachGthetalnNo+1)*pi/20
-            eachGthetaln=numpy.log(eachGthetaln)*eachGthetaln*(cos(angle1)-cos(angle2))
+            eachGthetaln=numpy.log(eachGthetaln)*eachGthetaln*(numpy.cos(angle1)-numpy.cos(angle2))
             sumGthetaln+=eachGthetaln
     return sumGthetaln
 
