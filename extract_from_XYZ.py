@@ -6,12 +6,20 @@ to extract waters at a given coodinate (X,Y,Z) around 1.2 A
 
 import mdtraj as md
 import numpy as np
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-xyz","--xyzcoord", nargs='+',type=float,help="XYZ cooridnate 0.1 0.1 0.1")
+arg = parser.parse_args()
+
+XYZ_init=arg.xyzcoord
+
 
 TRAJ = 'md_noPBC.xtc'
 TP = 'npt.gro'
 RADIUS = 0.14 #Unit is nm
-XYZ=np.array([2.4538, 4.1146, 3.6754], dtype='float32')
-
+XYZ=np.array(XYZ_init, dtype='float32')
+XYZ=XYZ/10
 
 def distance(XYZ1=np.array([0, 0, 0], dtype='float32'),
              XYZ2=np.array([1, 1, 1], dtype='float32')):
