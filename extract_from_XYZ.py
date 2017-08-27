@@ -51,7 +51,7 @@ def main():
     print "There are %d waters and %d frames" %(water_oxygen_indice.size,t.n_frames)
     
     f=0
-    count=0
+    count=0.0
     while(f < t.n_frames):
         print "left %s frame" %(t.n_frames-f)
         water_oxygen_indice = t[f].top.select('water and name O')
@@ -62,13 +62,14 @@ def main():
                 wat_indice.append(i+1)
                 wat_indice.append(i+2)
                 count += 1
-                print "HOH: %s,%s" %(distance(t.xyz[f,i,:],XYZ),count)
+                #print "HOH: %s,%s" %(distance(t.xyz[f,i,:],XYZ),count)
         if wat_indice:
             wateringrid=t[f].atom_slice(wat_indice)
             wateringrid.save_pdb('w%3.2f_%3.2f_%3.2f_%s.pdb' %(XYZ[0],XYZ[1],XYZ[2],f))
         f+=1
         print "\n"
-    print "XYZ: %s, occupationcy: %s" %(XYZ,count/t.n_frames)
+    nframes=float(t.n_frames)
+    print "XYZ: %s, occupationcy: %s" %(XYZ,float(count/nframes))
 
 if __name__ == "__main__":
     main()
